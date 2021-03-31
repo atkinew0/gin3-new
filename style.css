@@ -1,0 +1,53 @@
+html{
+    width:100%;
+}
+
+body {
+    background-color:blue;
+    color:yellow;
+    width:100%;
+    font-size:96px;
+    font-family: Arial, Helvetica, sans-serif;
+    font-weight:bold;
+    
+}
+
+#last{
+    
+    width:80%;
+    
+}
+
+#send{
+    border: solid black 10px;
+    background-color:#57f542;
+    font-size:120px;
+    border-radius: 10px;
+}
+
+#tag, #weight, #bales, #time, #last {
+    background-color:white;
+    display: inline-block;
+    margin: 25px;
+    border:yellow solid 8px;
+    color:black;
+    font-weight: normal;
+    font-size:96px;
+
+}
+
+#tag{
+    width:700px;
+}
+
+#time{
+    width:600px;
+}
+
+#weight{
+    width:200px;;
+}
+
+#bales{
+    width: 100px;
+}
