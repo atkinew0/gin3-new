@@ -61,9 +61,14 @@ app.get('/latest/:cutoff', (req, res) => {
 
             if(item[0] > cutoff){
 
-                console.log("In filter comparing", item[0], cutoff)
 
-                bales_list.push({time: item[0], tag: item[1], weight: item[2]});
+                let bale_interval = 0;
+
+                if(i > 0){
+                    bale_interval =item[0] -  bales_list[i -1].time;  //time since last bale in milliseconds
+                }
+
+                bales_list.push({time: item[0], tag: item[1], weight: item[2], interval: bale_interval});
             }
         }
 
