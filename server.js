@@ -10,11 +10,17 @@ const stream = require('stream')
 const config = require('./config.json')
 
 //const BALEFILE = '/mnt/usb/bales.txt'
-const BALEFILE = 'bales.txt'
+
+let d = new Date();
+let today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
+
+const BALEFILE = `bales${today}.txt`
 
 
 app.use(cors());
 app.use(express.json())
+
+
 
 
 app.post("/",(req,res) => {
@@ -35,10 +41,8 @@ app.get('/gin', (req, res) => {
 
 
 
-app.get('/latest/:cutoff', (req, res) => {
+app.get('/today', (req, res) => {
 
-    let cutoff = parseInt(req.params.cutoff);
-    console.log("Hit latest cutoff route");
 
     file.readFile(BALEFILE, 'utf8', (err, data) => {
 
@@ -59,8 +63,6 @@ app.get('/latest/:cutoff', (req, res) => {
             // let d = new Date()
             // let cutoff = d.getTime() - (1000 * 60 * 60);        //in response to GET /latest send bales from previous 1 hr
 
-            if(item[0] > cutoff){
-
 
                 let bale_interval = 0;
 
@@ -69,7 +71,7 @@ app.get('/latest/:cutoff', (req, res) => {
                 }
 
                 bales_list.push({time: item[0], tag: item[1], weight: item[2], interval: bale_interval});
-            }
+            
         }
 
         bales_data.bales = {list: bales_list};
