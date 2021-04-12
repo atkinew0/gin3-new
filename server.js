@@ -14,7 +14,7 @@ const config = require('./config.json')
 let d = new Date();
 let today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
 
-const BALEFILE = `bales${today}.txt`
+const BALEFILE = `baledata/bales${today}.txt`
 
 
 app.use(cors());

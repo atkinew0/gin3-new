@@ -1,5 +1,7 @@
 const SERVER = "http://localhost:3000";
 
+
+
 window.onload = () => {
 
 
@@ -23,9 +25,11 @@ window.onload = () => {
 
         if(tagval.length != 12 || ( weightval < 400 || weightval > 600 ) ){
           console.log("Error:  weight or tag out of range, tag:",tag.value, "weight: ", weight.value);
+          playSound("err.mp3")
         }else{
 
-          alert("Sent!")
+          
+          console.log("Sent bale ", tagval," ", weightval)
           let xhr = new XMLHttpRequest;
           xhr.open('POST', SERVER);
           xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
@@ -40,7 +44,9 @@ window.onload = () => {
             let next = (parseInt(current) + 1).toString().padStart(12,"0");
             document.getElementById("tag").value = next;
 
-            document.getElementById("weight").value = 0
+            document.getElementById("weight").value = ""
+            document.getElementById("weight").focus()
+
           }
 
         }
@@ -48,4 +54,9 @@ window.onload = () => {
         
       });
 
+}
+
+function playSound(url) {
+  const audio = new Audio(url);
+  audio.play();
 }
