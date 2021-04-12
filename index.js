@@ -5,6 +5,10 @@ const SERVER = "http://localhost:3000";
 window.onload = () => {
 
 
+    document.getElementById("weight").value = ""
+    document.getElementById("weight").focus()
+
+
       setInterval(()=> {
 
         let d = new Date();
@@ -23,7 +27,8 @@ window.onload = () => {
         let weightval = parseInt(document.getElementById("weight").value);
 
 
-        if(tagval.length != 12 || ( weightval < 400 || weightval > 600 ) ){
+        if(tagval.length != 12 || ( weightval < 400 || weightval > 600 ) || !(typeof weightval =="number" && weightval >= 0) ){
+
           console.log("Error:  weight or tag out of range, tag:",tag.value, "weight: ", weight.value);
           playSound("err.mp3")
         }else{
