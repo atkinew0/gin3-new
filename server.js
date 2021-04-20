@@ -1,6 +1,6 @@
 const file = require('fs')
 const cors = require('cors')
-
+const util = require('util')
 const express = require('express')
 const app = express()
 
@@ -15,12 +15,17 @@ let d = new Date();
 let today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
 
 const BALEFILE = `baledata/bales${today}.txt`
-
+const LOGFILE = 'log.log'
 
 app.use(cors());
 app.use(express.json())
 
-
+console.log = (d) => {
+ 
+	let time = new Date()
+	logFile.write(time.toLocaleString() + util.format(d) + '\n')
+	process.stdout.write(util.format(d) + '\n')
+}
 
 
 app.post("/",(req,res) => {
@@ -87,5 +92,9 @@ app.listen(port, () => console.log(`Example app listening at http ://localhost:$
 
 const outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
     console.log("Create write err",err)
+} );
+
+const logFile = file.createWriteStream(LOGFILE, {flags:'a'}, err => {
+	console.log("Create log file error", err)
 } );
 
