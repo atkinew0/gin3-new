@@ -20,7 +20,7 @@ const LOGFILE = 'log.log'
 app.use(cors());
 app.use(express.json())
 
-console.log = (d) => {
+var log = (d) => {
  
 	let time = new Date()
 	logFile.write(time.toLocaleString() + util.format(d) + '\n')
@@ -29,7 +29,7 @@ console.log = (d) => {
 
 
 app.post("/",(req,res) => {
-    console.log("Got info :", req.body);
+    log("Got bale info :" + req.body.time + " " + req.body.tag + " " + req.body.weight);
 
     outFile.write(`${req.body.time},${req.body.tag},${req.body.weight}\n`);
     //TODO here write the bales json in body into a filesmtream of bales.txt
@@ -52,7 +52,7 @@ app.get('/today', (req, res) => {
     file.readFile(BALEFILE, 'utf8', (err, data) => {
 
         if (err){
-            console.log("Read error:", err)
+           log("Read error:"+ err)
             return;
             
         } 
@@ -87,14 +87,14 @@ app.get('/today', (req, res) => {
 });
 
 
-app.listen(port, () => console.log(`Example app listening at http ://localhost:${port}`));
+app.listen(port, () => log(`Bale watch server listening at http ://localhost:${port}`));
 
 
 const outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
-    console.log("Create write err",err)
+    log("Create write err" + err)
 } );
 
 const logFile = file.createWriteStream(LOGFILE, {flags:'a'}, err => {
-	console.log("Create log file error", err)
+	log("Create log file error" + err)
 } );
 
