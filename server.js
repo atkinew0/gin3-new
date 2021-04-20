@@ -59,6 +59,11 @@ app.get('/today', (req, res) => {
 
 
         let lines = data.trim().split("\n");
+
+	//check necessary to prevent empty file being read as spurious bale    
+        if(lines.length == 1) lines = []
+
+
         let bales_data = {};
         let bales_list = []
 
