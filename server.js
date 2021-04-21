@@ -60,8 +60,10 @@ app.get('/today', (req, res) => {
 
         let lines = data.trim().split("\n");
 
+	console.log("Lines after split are", lines)
+
 	//check necessary to prevent empty file being read as spurious bale    
-        if(lines.length == 1) lines = []
+        if(lines[0].length == 1) lines = []
 
 
         let bales_data = {};
