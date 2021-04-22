@@ -9,6 +9,34 @@ window.onload = () => {
     document.getElementById("weight").focus()
 
 
+      //give the server 10 seconds to hopefully boot and query the last PBI tag in the bale file for the current day
+      //this is to prevent having to reenter the tag sequence in case of intra day reboot/ chrome autorefresh
+      setTimeout(() => {
+        
+
+        let xhr1 = new XMLHttpRequest;
+        xhr1.open('GET', `${SERVER}/lastbale`);
+        xhr1.send();
+
+        xhr1.onload = () => {
+
+          let tag = document.getElementById("tag")
+
+
+          if(xhr1.status == 200){
+            let lasttag = JSON.parse(xhr1.response).tag
+            let next = (parseInt(lasttag) + 1).toString().padStart(12,"0");
+            tag.value = next
+          }else{
+            tag.value = "000000000001";
+          }
+          
+        }
+
+
+      },10000);
+
+
       setInterval(()=> {
 
         let d = new Date();
@@ -27,10 +55,15 @@ window.onload = () => {
         let weightval = parseInt(document.getElementById("weight").value);
 
 
-        if(tagval.length != 12 || ( weightval < 400 || weightval > 600 ) || !(typeof weightval =="number" && weightval >= 0) ){
+        if( tagval.length != 12 ){
 
-          console.log("Error:  weight or tag out of range, tag:",tag.value, "weight: ", weight.value);
-          playSound("err.mp3")
+          displayError("Invalid PBI Tag")
+
+          
+        }
+        else if ( weightval < 400 || weightval > 600  || !(typeof weightval =="number" && weightval >= 0) )  {
+          displayError("weight invalid or out of range")
+          
         }else{
 
           
@@ -45,12 +78,18 @@ window.onload = () => {
 
           //if XHR send response is OK- presume it was written and increment tag, zero weight
           xhr.onload = () => {
-            let current = document.getElementById("tag").value;
-            let next = (parseInt(current) + 1).toString().padStart(12,"0");
-            document.getElementById("tag").value = next;
 
-            document.getElementById("weight").value = ""
-            document.getElementById("weight").focus()
+            if(xhr.status == 200){
+              let current = document.getElementById("tag").value;
+              let next = (parseInt(current) + 1).toString().padStart(12,"0");
+              document.getElementById("tag").value = next;
+
+              document.getElementById("weight").value = ""
+              document.getElementById("weight").focus()
+            }else{
+              displayError(`Connectivity issue at ${SERVER}`)
+            }
+            
 
           }
 
@@ -58,6 +97,23 @@ window.onload = () => {
 
         
       });
+
+}
+
+function displayError(errorMessage){
+
+  console.log("Error: ", errorMessage)
+  playSound("err.mp3")
+
+  let modal = document.querySelector("#modal");
+  modal.innerHTML = "Error:" + errorMessage;
+  modal.style.display = "inherit";
+
+  setTimeout(() => {
+    
+    modal.style.display = "none";
+
+  }, 3000)
 
 }
 

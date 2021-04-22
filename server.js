@@ -44,6 +44,37 @@ app.get('/gin', (req, res) => {
 
 })
 
+app.get('/lastbale', (req,res) =>{
+
+    file.readFile(BALEFILE, 'utf8', (err, data) => {
+
+        if (err){
+           log("Read error:"+ err)
+            return;
+            
+        } 
+
+
+        let lines = data.trim().split("\n");
+
+
+	//check necessary to prevent empty file being read as spurious bale    
+        if(lines[0].length > 1){
+            let lastBale = lines[lines.length-1];
+
+            let tag = lastBale.split(",")[1];
+            res.send({tag: tag});
+
+        }else{
+            res.send({tag:000000000001});
+        }
+
+    });
+
+
+
+});
+
 
 
 app.get('/today', (req, res) => {
