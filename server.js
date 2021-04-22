@@ -66,7 +66,7 @@ app.get('/lastbale', (req,res) =>{
             res.send({tag: tag});
 
         }else{
-            res.send({tag:000000000001});
+            res.send({tag:000000000000});
         }
 
     });
