@@ -14,11 +14,33 @@ const config = require('./config.json')
 let d = new Date();
 let today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
 
-const BALEFILE = `baledata/bales${today}.txt`
+
 const LOGFILE = 'log.log'
 
 app.use(cors());
 app.use(express.json())
+
+
+// function intended to create a new Bale file every night at 12:05AM to be used for the next day
+function scheduleReset(){
+
+    let reset = new Date()
+    reset.setHours(24,5,0,0);
+    let t = reset.getTime() - Date.now();
+    log("Reset scheduled for " + t.toLocaleString())
+
+    setTimeout(() => {
+        d = new Date()
+        today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
+        BALEFILE = `baledata/bales${today}.txt`
+        const outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
+            log("Create write err" + err)
+        } );
+        scheduleReset()
+        log("Bale file updated and reset scheduled")
+    }, t)
+
+}
 
 var log = (d) => {
  
@@ -134,4 +156,6 @@ const outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
 const logFile = file.createWriteStream(LOGFILE, {flags:'a'}, err => {
 	log("Create log file error" + err)
 } );
+
+scheduleReset()
 
