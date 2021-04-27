@@ -62,7 +62,7 @@ window.onload = () => {
           
         }
         else if ( weightval < 400 || weightval > 600  || !(typeof weightval =="number" && weightval >= 0) )  {
-          displayError("weight invalid or out of range")
+          displayError(`weight ${weightval} invalid or out of range`)
           
         }else{
 
@@ -80,6 +80,7 @@ window.onload = () => {
           xhr.onload = () => {
 
             if(xhr.status == 200){
+              displaySuccess()
               let current = document.getElementById("tag").value;
               let next = (parseInt(current) + 1).toString().padStart(12,"0");
               document.getElementById("tag").value = next;
@@ -100,12 +101,28 @@ window.onload = () => {
 
 }
 
+
+//TO-DO these should be consolidated into a single displayModal
+function displaySuccess(){
+
+  let modal = document.querySelector("#success");
+  modal.innerHTML = "OK";
+  modal.style.display = "inherit";
+
+  setTimeout(() => {
+    
+    modal.style.display = "none";
+
+  }, 1000)
+
+}
+
 function displayError(errorMessage){
 
   console.log("Error: ", errorMessage)
   playSound("err.mp3")
 
-  let modal = document.querySelector("#modal");
+  let modal = document.querySelector("#error");
   modal.innerHTML = "Error:" + errorMessage;
   modal.style.display = "inherit";
 

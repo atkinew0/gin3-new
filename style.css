@@ -57,7 +57,7 @@ body {
     width: 200px;
 }
 
-#modal{
+.modal{
     width:50%;
     overflow:hidden;
     box-shadow:0 0 10px black;
@@ -68,9 +68,21 @@ body {
     z-index:9999;
     padding: 75px;
     text-align:center;
-    background-color:red;
     font-size:120px;
     color:black;
     display:none;
+    
+}
+
+#error{
+    width:50%;
+    background-color:red;
+   
+    
+}
+
+#success{
+    width:30%;
+    background-color:#57f542;
     
 }

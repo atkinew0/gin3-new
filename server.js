@@ -11,15 +11,24 @@ const config = require('./config.json')
 
 //const BALEFILE = '/mnt/usb/bales.txt'
 
-let d = new Date();
-let today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
 
+let today = getDateFormatted()
 
+let BALEFILE = `baledata/bales${today}.txt`
 const LOGFILE = 'log.log'
 
 app.use(cors());
 app.use(express.json())
 
+
+
+//to make sure we have a consistent date format with month number in the familiar Jan = 1 rather than 0 system
+function getDateFormatted(){
+    
+    let d = new Date();
+
+    return `${d.getMonth() + 1}${d.getDate()}${d.getFullYear()}`
+}
 
 // function intended to create a new Bale file every night at 12:05AM to be used for the next day
 function scheduleReset(){
@@ -27,13 +36,14 @@ function scheduleReset(){
     let reset = new Date()
     reset.setHours(24,5,0,0);
     let t = reset.getTime() - Date.now();
-    log("Reset scheduled for " + t.toLocaleString())
+    log("Reset scheduled for " + reset.toLocaleString())
 
     setTimeout(() => {
-        d = new Date()
-        today = `${d.getMonth()}${d.getDate()}${d.getFullYear()}`
+        log("Running date reset and generating new bale file")
+       
+        today = getDateFormatted()
         BALEFILE = `baledata/bales${today}.txt`
-        const outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
+        outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
             log("Create write err" + err)
         } );
         scheduleReset()
@@ -42,12 +52,16 @@ function scheduleReset(){
 
 }
 
-var log = (d) => {
+function log(msg) {
  
 	let time = new Date()
-	logFile.write(time.toLocaleString() + util.format(d) + '\n')
-	process.stdout.write(util.format(d) + '\n')
+	logFile.write(time.toLocaleString() + util.format(msg) + '\n')
+	process.stdout.write(util.format(msg) + '\n')
 }
+
+
+
+//EXPRESS routes
 
 
 app.post("/",(req,res) => {
@@ -149,7 +163,7 @@ app.get('/today', (req, res) => {
 app.listen(port, () => log(`Bale watch server listening at http ://localhost:${port}`));
 
 
-const outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
+let outFile = file.createWriteStream(BALEFILE, {flags:'a'},err =>{
     log("Create write err" + err)
 } );
 
